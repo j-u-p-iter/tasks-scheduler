@@ -1,0 +1,27 @@
+{
+  "name": "@j.u.p.iter/tasks-scheduler",
+  "version": "0.0.0-semantically-released",
+  "description": "Tasks scheduler",
+  "main": "dist/lib/index.js",
+  "typings": "dist/types",
+  "repository": "git@github.com:j-u-p-iter/tasks-scheduler.git",
+  "author": "Leontyev Kirill (j.u.p.iter) <pn79122821224@gmail.com> (http://j-u-p-iter.ru/)",
+  "license": "MIT",
+  "scripts": {
+    "commit": "jupiter-scripts precommit --allowJs",
+    "build": "jupiter-scripts build",
+    "lint": "jupiter-scripts lint --format codeFrame",
+    "lint:fix": "yarn run lint --fix",
+    "test": "jupiter-scripts test"
+  },
+  "devDependencies": {
+    "@j.u.p.iter/jupiter-scripts": "1.16.3",
+    "fs-extra": "^9.1.0"
+  },
+  "dependencies": {
+    "@j.u.p.iter/custom-error": "^1.5.1",
+    "@j.u.p.iter/find-path-to-file": "^1.0.1",
+    "@j.u.p.iter/system-error-code": "^1.0.0",
+    "node-cron": "^3.0.0"
+  }
+}
