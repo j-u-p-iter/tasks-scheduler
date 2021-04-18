@@ -32,21 +32,21 @@ const TaskWithoutSchedule = `
   }
 `;
 
-//const TaskWithInvalidSchedule = `
-  //import { BaseTask } from '../../dist/lib';
+const TaskWithInvalidScheduleExpression = `
+  import { BaseTask } from '../../../dist/lib';
 
-  //export default class Task1 extends BaseTask {
-    //name = 'Task1';
+  export default class Task1 extends BaseTask {
+    name = 'Task1';
 
-    //schedule() {
-      //return '*';
-    //}; 
+    schedule() {
+      return '*';
+    }; 
 
-    //run() {
-      //console.log("running task");  
-    //};
-  //}
-//`;
+    run() {
+      console.log("running task");  
+    };
+  }
+`;
 
 const TaskWithoutRun = `
   import { BaseTask } from '../../../dist/lib';
@@ -55,7 +55,7 @@ const TaskWithoutRun = `
     name = 'TaskWithoutRun';
 
     schedule() {
-      return '******';
+      return '* * * * *';
     }; 
   }
 `;
@@ -155,7 +155,22 @@ describe('TasksScheduler', () => {
 
       expect(runTasksResult).rejects.toThrow(Error);
       expect(runTasksResult).rejects.toThrow(
-        `The task "Task1" should declare schedule`
+        'The task "Task1" should declare schedule'
+      );
+    });
+  });
+
+  describe('when schedule expression is not valid', () => {
+    it('throws an appropriate error', async () => {
+      const tasksFolderPath = await createTasksFolder([{ name: TASK_1_NAME, content: TaskWithInvalidScheduleExpression }]);
+
+      const tasksScheduler = new TasksScheduler(tasksFolderPath);
+
+      const runTasksResult = tasksScheduler.run();
+
+      expect(runTasksResult).rejects.toThrow(Error);
+      expect(runTasksResult).rejects.toThrow(
+        'The task "Task1" declares invalid schedule *'
       );
     });
   });
@@ -170,7 +185,7 @@ describe('TasksScheduler', () => {
 
       expect(runTasksResult).rejects.toThrow(Error);
       expect(runTasksResult).rejects.toThrow(
-        `The task "TaskWithoutRun" should declare run method`
+        'The task "TaskWithoutRun" should declare run method'
       );
     });
   });
