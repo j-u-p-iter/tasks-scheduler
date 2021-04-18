@@ -1,6 +1,7 @@
 import { InvalidPathError } from "@j.u.p.iter/custom-error";
 import { findPathToFile } from "@j.u.p.iter/find-path-to-file";
 import { SystemErrorCode } from "@j.u.p.iter/system-error-code";
+import { isValidCron } from "cron-validator";
 import fs from "fs";
 import cron from "node-cron";
 import path from "path";
@@ -77,8 +78,16 @@ export class TasksScheduler {
   }
 
   private scheduleTask(task) {
-    if (task.schedule() === null) {
+    const schedule = task.schedule();
+
+    if (schedule === null) {
       throw new Error(`The task "${task.name}" should declare schedule`);
+    }
+
+    if (!isValidCron(schedule)) {
+      throw new Error(
+        `The task "${task.name}" declares invalid schedule ${schedule}`
+      );
     }
 
     if (task.run() === null) {
