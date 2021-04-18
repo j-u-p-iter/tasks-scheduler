@@ -2,7 +2,10 @@ import { InvalidPathError } from "@j.u.p.iter/custom-error";
 import { findPathToFile } from "@j.u.p.iter/find-path-to-file";
 import { SystemErrorCode } from "@j.u.p.iter/system-error-code";
 import fs from "fs";
+import cron from "node-cron";
 import path from "path";
+import * as tsNode from "ts-node";
+import { BaseTask } from "./BaseTask";
 
 export class TasksScheduler {
   private resolvedTasksPath = null;
@@ -60,18 +63,47 @@ export class TasksScheduler {
     return this.resolvedTasksPath;
   }
 
+  private initializeTask(taskEntry: string): BaseTask {
+    const pathToTask = path.resolve(this.resolvedTasksPath, taskEntry);
+    const Task = require(pathToTask).default;
+
+    if (!Task) {
+      throw new Error(`Task in "${taskEntry}" task file was not declared.`);
+    }
+
+    const task = new Task();
+
+    return task;
+  }
+
+  private scheduleTask(task) {
+    if (task.schedule() === null) {
+      throw new Error(`The task "${task.name}" should declare schedule`);
+    }
+
+    if (task.run() === null) {
+      throw new Error(`The task "${task.name}" should declare run method`);
+    }
+
+    cron.schedule(task.schedule(), task.run);
+
+    console.log(`Task "${task.name}" was scheduled`);
+  }
+
   /**
    * The tasksFolderPath should be relative to the
    *   application root folder or absolute.
    *
    */
-  constructor(private tasksFolderPath) {}
+  constructor(private tasksFolderPath: string) {
+    tsNode.register();
+  }
 
   /**
    * Scans tasks folder to find all folder entries
    */
   async scanTasksFolder() {
-    const allowedExtensions = [".js", ".ts"];
+    const allowedExtensions = [".ts"];
     const tasksFolderPath = await this.resolvePathToTasksFolder();
 
     let entries;
@@ -105,9 +137,9 @@ export class TasksScheduler {
     }
 
     tasksEntries.forEach(taskEntry => {
-      const pathToTask = path.resolve(this.resolvedTasksPath, taskEntry);
+      const task = this.initializeTask(taskEntry);
 
-      console.log("PATH_TO_TASK:", pathToTask);
+      this.scheduleTask(task);
     });
   }
 }

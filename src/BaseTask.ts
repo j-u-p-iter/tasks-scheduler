@@ -1,4 +1,6 @@
 export class BaseTask {
+  public name: string;
+
   public schedule() {
     return null;
   }

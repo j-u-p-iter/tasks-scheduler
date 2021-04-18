@@ -16,12 +16,17 @@
   },
   "devDependencies": {
     "@j.u.p.iter/jupiter-scripts": "1.16.3",
-    "fs-extra": "^9.1.0"
+    "@j.u.p.iter/ts-compiler": "^1.1.0",
+    "find-cache-dir": "^3.3.1",
+    "fs-extra": "^9.1.0",
+    "typescript": "^4.2.4",
+    "uuid": "^8.3.2"
   },
   "dependencies": {
     "@j.u.p.iter/custom-error": "^1.5.1",
     "@j.u.p.iter/find-path-to-file": "^1.0.1",
     "@j.u.p.iter/system-error-code": "^1.0.0",
-    "node-cron": "^3.0.0"
+    "node-cron": "^3.0.0",
+    "ts-node": "^9.1.1"
   }
 }
