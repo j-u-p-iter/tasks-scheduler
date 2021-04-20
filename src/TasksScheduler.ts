@@ -18,7 +18,7 @@ export class TasksScheduler {
    *   (relative to the app root folder).
    *
    * We need to make it relative if it's absolute, to be
-   *   able to work with this in a consistent way.
+   *   able to work with this path in a consistent way.
    *
    */
   private async absolutePathToRelative(pathToModify) {

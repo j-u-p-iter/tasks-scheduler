@@ -1,24 +1,25 @@
 import path from 'path';
 import { ensureDir, outputFile, remove } from 'fs-extra';
 import { InvalidPathError } from "@j.u.p.iter/custom-error";
-import { TasksScheduler } from './TasksScheduler';
+import { TasksScheduler } from '.';
 import { v4 as uuid } from 'uuid';
+import cron from 'node-cron';
 
-//const Task = `
-  //import { BaseTask } from '../../dist/lib';
+const ValidTask = `
+  import { BaseTask } from '../../../dist/lib';
 
-  //export default class Task1 extends BaseTask {
-    //name = 'Task1';
+  export default class Task1 extends BaseTask {
+    name = 'Task1';
 
-    //schedule() {
-      //return '******';
-    //}; 
+    schedule() {
+      return '* * * * *';
+    }; 
 
-    //run() {
-      //console.log("running task");  
-    //};
-  //}
-//`;
+    run() {
+      console.log("Schedule task");  
+    };
+  }
+`;
 
 const TaskWithoutSchedule = `
   import { BaseTask } from '../../../dist/lib';
@@ -86,9 +87,12 @@ const createTasksFolder = async (tasks = []) => {
   return tasksFolderPath;
 }
 
+const scheduleSpy = jest.spyOn(cron, 'schedule').mockImplementation(() => {});
+
 describe('TasksScheduler', () => {
   afterEach(async () => {
     await remove(path.join(rootTasksFolderPath));
+    scheduleSpy.mockClear();
   });
 
   it('logs running indication message in the beginning', async () => {
@@ -187,6 +191,19 @@ describe('TasksScheduler', () => {
       expect(runTasksResult).rejects.toThrow(
         'The task "TaskWithoutRun" should declare run method'
       );
+    });
+  });
+
+  describe('when there is a valid task', () => {
+    it('runs a task', async () => {
+      const tasksFolderPath = await createTasksFolder([{ name: TASK_1_NAME, content: ValidTask }]);
+
+      const tasksScheduler = new TasksScheduler(tasksFolderPath);
+
+      await tasksScheduler.run();
+
+      expect(scheduleSpy.mock.calls[0][0]).toBe('* * * * *');
+      expect(typeof scheduleSpy.mock.calls[0][1]).toBe('function');
     });
   });
 });
