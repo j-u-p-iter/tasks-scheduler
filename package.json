@@ -12,7 +12,8 @@
     "build": "jupiter-scripts build",
     "lint": "jupiter-scripts lint --format codeFrame",
     "lint:fix": "yarn run lint --fix",
-    "test": "jupiter-scripts test"
+    "test": "jupiter-scripts test",
+    "deploy": "jupiter-scripts deploy"
   },
   "devDependencies": {
     "@j.u.p.iter/jupiter-scripts": "1.16.3",
