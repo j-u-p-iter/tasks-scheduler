@@ -8,9 +8,7 @@ import cron from 'node-cron';
 const ValidTask = `
   import { BaseTask } from '../../../dist/lib';
 
-  export default class Task1 extends BaseTask {
-    name = 'Task1';
-
+  export default class ValidTask extends BaseTask {
     schedule() {
       return '* * * * *';
     }; 
@@ -24,9 +22,7 @@ const ValidTask = `
 const TaskWithoutSchedule = `
   import { BaseTask } from '../../../dist/lib';
 
-  export default class Task1 extends BaseTask {
-    name = 'Task1';
-
+  export default class TaskWithoutSchedule extends BaseTask {
     run() {
       console.log("running task");  
     };
@@ -36,9 +32,7 @@ const TaskWithoutSchedule = `
 const TaskWithInvalidScheduleExpression = `
   import { BaseTask } from '../../../dist/lib';
 
-  export default class Task1 extends BaseTask {
-    name = 'Task1';
-
+  export default class TaskWithInvalidScheduleExpression extends BaseTask {
     schedule() {
       return '*';
     }; 
@@ -52,9 +46,7 @@ const TaskWithInvalidScheduleExpression = `
 const TaskWithoutRun = `
   import { BaseTask } from '../../../dist/lib';
 
-  export default class Task1 extends BaseTask {
-    name = 'TaskWithoutRun';
-
+  export default class TaskWithoutRun extends BaseTask {
     schedule() {
       return '* * * * *';
     }; 
@@ -92,6 +84,7 @@ const scheduleSpy = jest.spyOn(cron, 'schedule').mockImplementation(() => {});
 describe('TasksScheduler', () => {
   afterEach(async () => {
     await remove(path.join(rootTasksFolderPath));
+
     scheduleSpy.mockClear();
   });
 
@@ -159,7 +152,7 @@ describe('TasksScheduler', () => {
 
       expect(runTasksResult).rejects.toThrow(Error);
       expect(runTasksResult).rejects.toThrow(
-        'The task "Task1" should declare schedule'
+        'The task "task:without:schedule" should declare schedule'
       );
     });
   });
@@ -174,7 +167,7 @@ describe('TasksScheduler', () => {
 
       expect(runTasksResult).rejects.toThrow(Error);
       expect(runTasksResult).rejects.toThrow(
-        'The task "Task1" declares invalid schedule *'
+        'The task "task:with:invalid:schedule:expression" declares invalid schedule *'
       );
     });
   });
@@ -189,7 +182,7 @@ describe('TasksScheduler', () => {
 
       expect(runTasksResult).rejects.toThrow(Error);
       expect(runTasksResult).rejects.toThrow(
-        'The task "TaskWithoutRun" should declare run method'
+        'The task "task:without:run" should declare run method'
       );
     });
   });
@@ -205,5 +198,9 @@ describe('TasksScheduler', () => {
       expect(scheduleSpy.mock.calls[0][0]).toBe('* * * * *');
       expect(typeof scheduleSpy.mock.calls[0][1]).toBe('function');
     });
+  });
+
+  describe('when run multiple times', () => {
+
   });
 });

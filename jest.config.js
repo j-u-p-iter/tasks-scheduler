@@ -4,4 +4,5 @@ module.exports = {
   ...originalConfig,
   watchPathIgnorePatterns: ['/tasks/'],
   coveragePathIgnorePatterns: ['/tasks/'],
+  coverageThreshold: null, 
 };

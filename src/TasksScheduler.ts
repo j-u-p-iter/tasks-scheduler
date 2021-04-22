@@ -50,10 +50,6 @@ export class TasksScheduler {
   }
 
   private async resolvePathToTasksFolder() {
-    if (this.resolvedTasksPath) {
-      return this.resolvedTasksPath;
-    }
-
     const appRootFolderPath = await this.getAppRootFolderPath();
     const tasksFolderPath = await this.absolutePathToRelative(
       this.tasksFolderPath
@@ -102,6 +98,8 @@ export class TasksScheduler {
   /**
    * The tasksFolderPath should be relative to the
    *   application root folder or absolute.
+   *   Further we'll prepare the resolvedTasksPath, that
+   *   is always an absolute path.
    *
    */
   constructor(private tasksFolderPath: string) {
@@ -110,6 +108,7 @@ export class TasksScheduler {
 
   /**
    * Scans tasks folder to find all folder entries
+   *
    */
   async scanTasksFolder() {
     const allowedExtensions = [".ts"];
