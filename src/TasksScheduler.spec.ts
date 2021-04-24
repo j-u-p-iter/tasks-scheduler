@@ -101,13 +101,13 @@ describe('TasksScheduler', () => {
   });
 
   describe('when there is no tasks folder by the provided path', () => {
-    it('throws an appropriate error properly', () => {
+    it('throws an appropriate error properly', async () => {
       const tasksScheduler = new TasksScheduler('./someInvalidPath');
 
       const runTasksResult = tasksScheduler.run();
 
-      expect(runTasksResult).rejects.toThrow(InvalidPathError);
-      expect(runTasksResult).rejects.toThrow(
+      await expect(runTasksResult).rejects.toThrow(InvalidPathError);
+      await expect(runTasksResult).rejects.toThrow(
         'File /Users/j.u.p.iter/projects/tasks-scheduler/someInvalidPath does not exist'
       );
     });
@@ -135,8 +135,8 @@ describe('TasksScheduler', () => {
 
       const runTasksResult = tasksScheduler.run();
 
-      expect(runTasksResult).rejects.toThrow(Error);
-      expect(runTasksResult).rejects.toThrow(
+      await expect(runTasksResult).rejects.toThrow(Error);
+      await expect(runTasksResult).rejects.toThrow(
         `Task in "${TASK_1_NAME}" task file was not declared.`
       );
     });
@@ -150,8 +150,8 @@ describe('TasksScheduler', () => {
 
       const runTasksResult = tasksScheduler.run();
 
-      expect(runTasksResult).rejects.toThrow(Error);
-      expect(runTasksResult).rejects.toThrow(
+      await expect(runTasksResult).rejects.toThrow(Error);
+      await expect(runTasksResult).rejects.toThrow(
         'The task "task:without:schedule" should declare schedule'
       );
     });
@@ -165,8 +165,8 @@ describe('TasksScheduler', () => {
 
       const runTasksResult = tasksScheduler.run();
 
-      expect(runTasksResult).rejects.toThrow(Error);
-      expect(runTasksResult).rejects.toThrow(
+      await expect(runTasksResult).rejects.toThrow(Error);
+      await expect(runTasksResult).rejects.toThrow(
         'The task "task:with:invalid:schedule:expression" declares invalid schedule *'
       );
     });
@@ -180,8 +180,8 @@ describe('TasksScheduler', () => {
 
       const runTasksResult = tasksScheduler.run();
 
-      expect(runTasksResult).rejects.toThrow(Error);
-      expect(runTasksResult).rejects.toThrow(
+      await expect(runTasksResult).rejects.toThrow(Error);
+      await expect(runTasksResult).rejects.toThrow(
         'The task "task:without:run" should declare run method'
       );
     });
