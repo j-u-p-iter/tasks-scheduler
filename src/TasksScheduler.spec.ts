@@ -107,7 +107,7 @@ describe('TasksScheduler', () => {
       const runTasksResult = tasksScheduler.run();
 
       await expect(runTasksResult).rejects.toThrow(InvalidPathError);
-      await expect(runTasksResult).rejects.toThrow(`Directory ${path.resolve(__dirname, '..')}/someInvalidPath does not exist`);
+      await expect(runTasksResult).rejects.toThrow(`File ${path.resolve(__dirname, '..')}/someInvalidPath does not exist`);
     });
   });
 

@@ -1210,6 +1210,13 @@
   resolved "https://registry.yarnpkg.com/@j.u.p.iter/find-path-to-file/-/find-path-to-file-1.0.1.tgz#55927c78f0ef9c641f6080a51cf21ee673d4a791"
   integrity sha512-PQ7SG0u+91Cu+i6WkltNf4Yo4cgnfI+yvWCzieDEdf/0lNt1hU6hQzI3f+PYW1R8cMYRrUe3IrahASLn/pZMTQ==
 
+"@j.u.p.iter/folder-path@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@j.u.p.iter/folder-path/-/folder-path-1.0.1.tgz#cfc673fc80d4ba4e5b9941120bd30c64365a699e"
+  integrity sha512-RRlqflbSxhFmCyBbELM2fRPYJ+kGAqY7HtSUTmT21RYh8SxK9BeAcfVhNqJm2qyle8yTrSc3e6DMpLbXkNzjfA==
+  dependencies:
+    "@j.u.p.iter/find-path-to-file" "^1.0.1"
+
 "@j.u.p.iter/http-status@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@j.u.p.iter/http-status/-/http-status-1.2.1.tgz#fde5f1ab9a37657ef4fd9837fb14c5c30c3cfc40"
