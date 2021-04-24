@@ -1205,10 +1205,24 @@
   dependencies:
     "@j.u.p.iter/http-status" "^1.2.1"
 
+"@j.u.p.iter/custom-error@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@j.u.p.iter/custom-error/-/custom-error-1.5.2.tgz#61832a9c22da94f77e59a66a5dae9403bda0e775"
+  integrity sha512-+hRjyqw+eNz67l7sHgx3kThmIUszwFDDojPOFoND3uUDZ8Cq42Z5h1nNMFwLB6trsbOn2Ec0DH+6+JstJsZWKw==
+  dependencies:
+    "@j.u.p.iter/http-status" "^1.2.1"
+
 "@j.u.p.iter/find-path-to-file@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@j.u.p.iter/find-path-to-file/-/find-path-to-file-1.0.1.tgz#55927c78f0ef9c641f6080a51cf21ee673d4a791"
   integrity sha512-PQ7SG0u+91Cu+i6WkltNf4Yo4cgnfI+yvWCzieDEdf/0lNt1hU6hQzI3f+PYW1R8cMYRrUe3IrahASLn/pZMTQ==
+
+"@j.u.p.iter/folder-path@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@j.u.p.iter/folder-path/-/folder-path-1.0.1.tgz#cfc673fc80d4ba4e5b9941120bd30c64365a699e"
+  integrity sha512-RRlqflbSxhFmCyBbELM2fRPYJ+kGAqY7HtSUTmT21RYh8SxK9BeAcfVhNqJm2qyle8yTrSc3e6DMpLbXkNzjfA==
+  dependencies:
+    "@j.u.p.iter/find-path-to-file" "^1.0.1"
 
 "@j.u.p.iter/http-status@^1.2.1":
   version "1.2.1"

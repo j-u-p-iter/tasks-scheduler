@@ -1,5 +1,5 @@
 import { InvalidPathError } from "@j.u.p.iter/custom-error";
-import { findPathToFile } from "@j.u.p.iter/find-path-to-file";
+import { FolderPath } from "@j.u.p.iter/folder-path";
 import { SystemErrorCode } from "@j.u.p.iter/system-error-code";
 import { isValidCron } from "cron-validator";
 import fs from "fs";
@@ -9,56 +9,9 @@ import * as tsNode from "ts-node";
 import { BaseTask } from "./BaseTask";
 
 export class TasksScheduler {
+  private folderPath = new FolderPath();
+
   private resolvedTasksPath = null;
-
-  private appRootPath = null;
-
-  /**
-   * Tasks folder path can be either absolute or relative
-   *   (relative to the app root folder).
-   *
-   * We need to make it relative if it's absolute, to be
-   *   able to work with this path in a consistent way.
-   *
-   */
-  private async absolutePathToRelative(pathToModify) {
-    const appRootFolderPath = await this.getAppRootFolderPath();
-    /**
-     * appRootFolderPath is always absolute path.
-     *   If pathToModify is also an absolute,
-     *   we get the relative path to the app root folder in the end.
-     *
-     */
-    return pathToModify.replace(appRootFolderPath, "");
-  }
-
-  /**
-   * Detects the root path to the project by location of
-   *   the "package.json" file internally.
-   *
-   */
-  private async getAppRootFolderPath() {
-    if (this.appRootPath) {
-      return this.appRootPath;
-    }
-
-    const { dirPath } = await findPathToFile("package.json");
-
-    this.appRootPath = dirPath;
-
-    return this.appRootPath;
-  }
-
-  private async resolvePathToTasksFolder() {
-    const appRootFolderPath = await this.getAppRootFolderPath();
-    const tasksFolderPath = await this.absolutePathToRelative(
-      this.tasksFolderPath
-    );
-
-    this.resolvedTasksPath = path.join(appRootFolderPath, tasksFolderPath);
-
-    return this.resolvedTasksPath;
-  }
 
   private initializeTask(taskEntry: string): BaseTask {
     const pathToTask = path.resolve(this.resolvedTasksPath, taskEntry);
@@ -112,15 +65,17 @@ export class TasksScheduler {
    */
   async scanTasksFolder() {
     const allowedExtensions = [".ts"];
-    const tasksFolderPath = await this.resolvePathToTasksFolder();
+    this.resolvedTasksPath = await this.folderPath.resolve(
+      this.tasksFolderPath
+    );
 
     let entries;
 
     try {
-      entries = await fs.promises.readdir(tasksFolderPath);
+      entries = await fs.promises.readdir(this.resolvedTasksPath);
     } catch (error) {
       if (error.code === SystemErrorCode.NO_FILE_OR_DIRECTORY) {
-        throw new InvalidPathError(tasksFolderPath, {
+        throw new InvalidPathError(this.resolvedTasksPath, false, {
           context: "@j.u.p.iter/tasks-scheduler"
         });
       }
